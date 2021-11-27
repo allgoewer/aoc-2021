@@ -1,7 +1,7 @@
+use app::{app, help};
+
 mod app;
 mod day1;
-
-use app::{app, help};
 
 fn main() {
     let days = all_the_days![
