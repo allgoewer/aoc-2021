@@ -4,8 +4,6 @@ version = "0.1.0"
 authors = ["Maik Allgöwer <maik@llgoewer.de>"]
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-itertools = "0.10.1"
-regex = "1.5.4"
+pico-args = "0.4.2"
+anyhow = "1.0.50"
