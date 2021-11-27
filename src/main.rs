@@ -1,6 +1,7 @@
-use aoc_2021::{all_the_days, app, help, Day};
-
+mod app;
 mod day1;
+
+use app::{app, help};
 
 fn main() {
     let days = all_the_days![
