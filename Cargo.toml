@@ -4,6 +4,14 @@ version = "0.1.0"
 authors = ["Maik Allgöwer <maik@llgoewer.de>"]
 edition = "2021"
 
+[lib]
+path = "src/lib.rs"
+name = "aoc21"
+
+[[bin]]
+path = "src/main.rs"
+name = "aoc21-cli"
+
 [dependencies]
 pico-args = "0.4.2"
 anyhow = "1.0.50"

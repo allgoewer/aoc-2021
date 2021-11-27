@@ -1,3 +1,4 @@
+use aoc21::Day;
 use std::io::{stdout, Write};
 use std::process::exit;
 use std::time::Instant;
@@ -11,7 +12,7 @@ macro_rules! all_the_days {
         (day, input)
     }};
     ($($module:ident: $input:expr),+) => {{
-        let days: Vec<(Box<dyn ::aoc_2021::Day>, _)> = vec![
+        let days: Vec<(Box<dyn ::aoc21::Day>, _)> = vec![
             $(all_the_days!($module -> $input)),+
         ];
 
@@ -22,12 +23,18 @@ macro_rules! all_the_days {
     }};
 }
 
-fn run_day(index: usize, day: &dyn ::aoc_2021::Day, input: &str) {
+/// Run the two parts of a day, printing their output and execution time
+///
+/// Note that the printed execution time does *NOT* have benchmark-quality.
+fn run_day(index: usize, day: &dyn ::aoc21::Day, input: &str) {
     timed(index, 1, || day.part1(input));
     timed(index, 2, || day.part2(input));
     println!();
 }
 
+/// Execute a closure and print its output and execution time
+///
+/// Note that the printed execution time does *NOT* have benchmark-quality
 fn timed<F>(day: usize, part: usize, func: F)
 where
     F: Fn() -> String,
@@ -45,6 +52,7 @@ where
     );
 }
 
+/// Print the help message
 pub fn help<W: Write>(mut w: W) {
     write!(
         w,
@@ -62,13 +70,17 @@ Options:
     .unwrap();
 }
 
+/// A description of the applications command line arguments
 #[derive(Debug)]
 struct Args {
+    /// Option to run only a single day
     single_day: Option<usize>,
+    /// Option to run only the latest available day
     latest_only: bool,
 }
 
 impl Args {
+    /// Generates [`Args`] with the help of the pico-args crate
     fn try_from_pico_args() -> Result<Args, anyhow::Error> {
         let mut args = pico_args::Arguments::from_env();
 
@@ -84,7 +96,8 @@ impl Args {
     }
 }
 
-pub fn app(days: Vec<(Box<dyn aoc_2021::Day>, &str)>) -> Result<(), anyhow::Error> {
+/// Runs the app
+pub fn app(days: Vec<(Box<dyn Day>, &str)>) -> Result<(), anyhow::Error> {
     let args = Args::try_from_pico_args()?;
 
     let single_day = if args.latest_only {

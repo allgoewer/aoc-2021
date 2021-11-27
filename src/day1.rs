@@ -1,4 +1,7 @@
-use aoc_2021::Day;
+//! The first day of the advent of code quiz.
+//!
+//! This is a dummy :)
+use aoc21::Day;
 
 pub struct Today;
 
