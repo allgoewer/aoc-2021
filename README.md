@@ -1,4 +1,4 @@
-# Advent of Code 2021 (in rust)
+# Advent of Code 2021
 
 ## Instructions
 
