@@ -13,3 +13,21 @@ pub trait Day {
         String::new()
     }
 }
+
+/// A set of utility functions useful for handling Advent of Code quizzes
+pub mod util {
+    /// Parses a newline separated input into an [`Iterator`] over T's
+    ///
+    /// # Panic
+    /// This functions panics if the lines cannot be parsed.
+    /// For Advent of Code, we assume that the input is properly formatted.
+    pub fn parsed<T>(input: &str) -> impl Clone + Iterator<Item = T> + '_
+    where
+        T: std::str::FromStr,
+        T::Err: std::fmt::Debug,
+    {
+        input
+            .lines()
+            .map(|l| l.trim().parse::<T>().expect("Unable to parse AOC input"))
+    }
+}
