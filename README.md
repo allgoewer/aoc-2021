@@ -17,5 +17,4 @@ Options:
     -h, --help                  Print this help message
     -d, --single-day    DAY     Only run the specified day
     -l, --latest-only           Only run the latest day
-"
 ```
