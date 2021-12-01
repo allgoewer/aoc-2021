@@ -18,10 +18,8 @@ fn count_increases(values: &[i32]) -> usize {
 }
 
 fn count_sliding_increases(values: &[i32]) -> usize {
-    values
-        .windows(4)
-        .filter(|w| w[0] + w[1] + w[2] < w[1] + w[2] + w[3])
-        .count()
+    // w[1] + w[2] cancels out on both sides of the equation
+    values.windows(4).filter(|w| w[0] < w[3]).count()
 }
 
 #[cfg(test)]
