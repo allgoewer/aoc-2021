@@ -1,7 +1,6 @@
 //! Application logic
 use aoc21::Quizzer;
 use std::io::{stdout, Write};
-use std::process::exit;
 use std::time::Instant;
 
 /// Compose all [`aoc21::Quiz`]s and their respective inputs into a [`Vec`]
@@ -75,6 +74,8 @@ Options:
 /// A description of the applications command line arguments
 #[derive(Debug)]
 struct Args {
+    /// Option to print the help output
+    help: bool,
     /// Option to run only a single quiz
     single_quiz: Option<usize>,
     /// Option to run only the latest available quiz
@@ -86,12 +87,8 @@ impl Args {
     fn try_from_pico_args() -> Result<Args, anyhow::Error> {
         let mut args = pico_args::Arguments::from_env();
 
-        if args.contains(["-h", "--help"]) {
-            help(stdout());
-            exit(0);
-        }
-
         Ok(Self {
+            help: args.contains(["-h", "--help"]),
             single_quiz: args.opt_value_from_str(["-q", "--single-quiz"])?,
             latest_only: args.contains(["-l", "--latest-only"]),
         })
@@ -101,6 +98,11 @@ impl Args {
 /// Runs the app
 pub fn app(quizzes: &[(Box<dyn Quizzer>, &str)]) -> Result<(), anyhow::Error> {
     let args = Args::try_from_pico_args()?;
+
+    if args.help {
+        help(stdout());
+        return Ok(());
+    }
 
     let single_quiz = if args.latest_only {
         quizzes.last().map(|d| (quizzes.len(), d))
