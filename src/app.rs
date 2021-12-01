@@ -97,7 +97,7 @@ impl Args {
 }
 
 /// Runs the app
-pub fn app(days: Vec<(Box<dyn Day>, &str)>) -> Result<(), anyhow::Error> {
+pub fn app(days: &[(Box<dyn Day>, &str)]) -> Result<(), anyhow::Error> {
     let args = Args::try_from_pico_args()?;
 
     let single_day = if args.latest_only {

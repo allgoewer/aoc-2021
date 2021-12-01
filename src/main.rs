@@ -8,7 +8,7 @@ fn main() {
         day1: "inputs/1",
     ];
 
-    if let Err(e) = app(days) {
+    if let Err(e) = app(&days) {
         eprintln!("{}", e);
         help(std::io::stderr());
         std::process::exit(1);
