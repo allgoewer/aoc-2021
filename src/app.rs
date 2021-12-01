@@ -58,7 +58,7 @@ pub fn help<W: Write>(mut w: W) {
     write!(
         w,
         "
-usage: aoc-2021 [-d DAY | --single-day DAY]
+usage: aoc-2021 [-d DAY | --single-day DAY] [-l | --latest-only]
 
 Run advent of code 2021
 
