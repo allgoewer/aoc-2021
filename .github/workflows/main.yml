@@ -17,8 +17,8 @@ jobs:
         with:
           command: test
 
-  fmt:
-    name: rustfmt
+  fmt_and_clippy:
+    name: rustfmt & clippy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,14 +27,18 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - run: rustup component add rustfmt
+      - run: rustup component add rustfmt clippy
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: -- -D warnings
 
-  clippy:
-    name: clippy
+  run:
+    name: run
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -43,8 +47,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-      - run: rustup component add clippy
       - uses: actions-rs/cargo@v1
         with:
-          command: clippy
-          args: -- -D warnings
+          command: run
+          args: --release
