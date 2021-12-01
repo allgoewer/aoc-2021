@@ -1,9 +1,9 @@
 //! Day 1: Sonar Sweep
-use aoc21::{util::*, Day};
+use aoc21::{util::*, Quizzer};
 
-pub struct Today;
+pub struct Quiz;
 
-impl Day for Today {
+impl Quizzer for Quiz {
     fn part1(&self, input: &str) -> String {
         count_increases(&collected(input)).to_string()
     }

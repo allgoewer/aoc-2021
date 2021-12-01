@@ -2,7 +2,7 @@
 ///
 /// Implementations of this trait should return the days result (which is probably always numeric)
 /// as a String.
-pub trait Day {
+pub trait Quizzer {
     /// The first part of a days quiz
     fn part1(&self, _input: &str) -> String {
         String::new()

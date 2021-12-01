@@ -1,19 +1,20 @@
 //! Application logic
-use aoc21::Day;
+use aoc21::Quizzer;
 use std::io::{stdout, Write};
 use std::process::exit;
 use std::time::Instant;
 
+/// Compose all [`aoc21::Quiz`]s and their respective inputs into a [`Vec`]
 #[macro_export]
 macro_rules! all_the_days {
     ($module:ident -> $input:expr) => {{
-        let day = Box::new($module::Today);
+        let day = Box::new($module::Quiz);
         let input = include_str!($input);
 
         (day, input)
     }};
     ($($module:ident: $input:expr),+) => {{
-        let days: Vec<(Box<dyn ::aoc21::Day>, _)> = vec![
+        let days: Vec<(Box<dyn ::aoc21::Quizzer>, _)> = vec![
             $(all_the_days!($module -> $input)),+
         ];
 
@@ -27,7 +28,7 @@ macro_rules! all_the_days {
 /// Run the two parts of a day, printing their output and execution time
 ///
 /// Note that the printed execution time does *NOT* have benchmark-quality.
-fn run_day(index: usize, day: &dyn ::aoc21::Day, input: &str) {
+fn run_day(index: usize, day: &dyn ::aoc21::Quizzer, input: &str) {
     timed(index, 1, || day.part1(input));
     timed(index, 2, || day.part2(input));
     println!();
@@ -98,7 +99,7 @@ impl Args {
 }
 
 /// Runs the app
-pub fn app(days: &[(Box<dyn Day>, &str)]) -> Result<(), anyhow::Error> {
+pub fn app(days: &[(Box<dyn Quizzer>, &str)]) -> Result<(), anyhow::Error> {
     let args = Args::try_from_pico_args()?;
 
     let single_day = if args.latest_only {
