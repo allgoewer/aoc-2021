@@ -5,21 +5,20 @@ pub struct Quiz;
 
 impl Quizzer for Quiz {
     fn part1(&self, input: &str) -> String {
-        count_increases(&collected(input)).to_string()
+        count_increases(&collected(input), 2).to_string()
     }
 
     fn part2(&self, input: &str) -> String {
-        count_sliding_increases(&collected(input)).to_string()
+        count_increases(&collected(input), 4).to_string()
     }
 }
 
-fn count_increases(values: &[i32]) -> usize {
-    values.windows(2).filter(|w| w[0] < w[1]).count()
-}
-
-fn count_sliding_increases(values: &[i32]) -> usize {
-    // w[1] + w[2] cancels out on both sides of the equation
-    values.windows(4).filter(|w| w[0] < w[3]).count()
+fn count_increases(values: &[i32], window_size: usize) -> usize {
+    // w[1] + .. + w[window_size - 2] cancels out on both sides of the equation
+    values
+        .windows(window_size)
+        .filter(|w| w[0] < w[window_size - 1])
+        .count()
 }
 
 #[cfg(test)]
@@ -30,11 +29,11 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        assert_eq!(count_increases(EXAMPLE), 7);
+        assert_eq!(count_increases(EXAMPLE, 1), 7);
     }
 
     #[test]
     fn part2_examples() {
-        assert_eq!(count_sliding_increases(EXAMPLE), 5);
+        assert_eq!(count_increases(EXAMPLE, 4), 5);
     }
 }
