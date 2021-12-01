@@ -13,12 +13,9 @@ impl Quizzer for Quiz {
     }
 }
 
-fn count_increases(values: &[i32], window_size: usize) -> usize {
-    // w[1] + .. + w[window_size - 2] cancels out on both sides of the equation
-    values
-        .windows(window_size)
-        .filter(|w| w[0] < w[window_size - 1])
-        .count()
+fn count_increases(values: &[i32], len: usize) -> usize {
+    // w[1] + .. + w[len - 2] cancels out on both sides of the equation
+    values.windows(len).filter(|w| w.first() < w.last()).count()
 }
 
 #[cfg(test)]
