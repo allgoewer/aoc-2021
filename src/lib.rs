@@ -1,7 +1,6 @@
 /// Trait to be implemented by all 25 quizzes of the Advent of Code
 ///
-/// Implementations of this trait should return the days result (which is probably always numeric)
-/// as a String.
+/// Implementations of this trait should return the quizzes result (which is probably always numeric) as a String.
 pub trait Quizzer {
     /// The first part of a days quiz
     fn part1(&self, _input: &str) -> String {
