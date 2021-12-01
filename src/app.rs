@@ -6,38 +6,38 @@ use std::time::Instant;
 
 /// Compose all [`aoc21::Quiz`]s and their respective inputs into a [`Vec`]
 #[macro_export]
-macro_rules! all_the_days {
+macro_rules! all_the_quizzes {
     ($module:ident -> $input:expr) => {{
-        let day = Box::new($module::Quiz);
+        let quiz = Box::new($module::Quiz);
         let input = include_str!($input);
 
-        (day, input)
+        (quiz, input)
     }};
     ($($module:ident: $input:expr),+) => {{
-        let days: Vec<(Box<dyn ::aoc21::Quizzer>, _)> = vec![
-            $(all_the_days!($module -> $input)),+
+        let quizzes: Vec<(Box<dyn ::aoc21::Quizzer>, _)> = vec![
+            $(all_the_quizzes!($module -> $input)),+
         ];
 
-        days
+        quizzes
     }};
     ($($module:ident: $input:expr),+,) => {{
-        all_the_days!($($module: $input),+)
+        all_the_quizzes!($($module: $input),+)
     }};
 }
 
-/// Run the two parts of a day, printing their output and execution time
+/// Run the two parts of a quiz, printing their output and execution time
 ///
 /// Note that the printed execution time does *NOT* have benchmark-quality.
-fn run_day(index: usize, day: &dyn ::aoc21::Quizzer, input: &str) {
-    timed(index, 1, || day.part1(input));
-    timed(index, 2, || day.part2(input));
+fn run_quiz(index: usize, quiz: &dyn ::aoc21::Quizzer, input: &str) {
+    timed(index, 1, || quiz.part1(input));
+    timed(index, 2, || quiz.part2(input));
     println!();
 }
 
 /// Execute a closure and print its output and execution time
 ///
 /// Note that the printed execution time does *NOT* have benchmark-quality
-fn timed<F>(day: usize, part: usize, func: F)
+fn timed<F>(quiz: usize, part: usize, func: F)
 where
     F: Fn() -> String,
 {
@@ -46,8 +46,8 @@ where
     let elapsed = start.elapsed();
 
     println!(
-        "day{:0>2}-part{} {:>9} us {:>12}",
-        day,
+        "quiz{:0>2}-part{} {:>9} us {:>12}",
+        quiz,
         part,
         elapsed.as_micros(),
         result
@@ -59,14 +59,14 @@ pub fn help<W: Write>(mut w: W) {
     write!(
         w,
         "
-usage: aoc-2021 [-d DAY | --single-day DAY] [-l | --latest-only]
+usage: aoc-2021 [-q QUIZ | --single-quiz QUIZ] [-l | --latest-only]
 
 Run advent of code 2021
 
 Options:
     -h, --help                  Print this help message
-    -d, --single-day    DAY     Only run the specified day
-    -l, --latest-only           Only run the latest day
+    -q, --single-quiz   QUIZ    Only run the specified quiz
+    -l, --latest-only           Only run the latest quiz
 "
     )
     .unwrap();
@@ -75,9 +75,9 @@ Options:
 /// A description of the applications command line arguments
 #[derive(Debug)]
 struct Args {
-    /// Option to run only a single day
-    single_day: Option<usize>,
-    /// Option to run only the latest available day
+    /// Option to run only a single quiz
+    single_quiz: Option<usize>,
+    /// Option to run only the latest available quiz
     latest_only: bool,
 }
 
@@ -92,33 +92,34 @@ impl Args {
         }
 
         Ok(Self {
-            single_day: args.opt_value_from_str(["-d", "--single-day"])?,
+            single_quiz: args.opt_value_from_str(["-q", "--single-quiz"])?,
             latest_only: args.contains(["-l", "--latest-only"]),
         })
     }
 }
 
 /// Runs the app
-pub fn app(days: &[(Box<dyn Quizzer>, &str)]) -> Result<(), anyhow::Error> {
+pub fn app(quizzes: &[(Box<dyn Quizzer>, &str)]) -> Result<(), anyhow::Error> {
     let args = Args::try_from_pico_args()?;
 
-    let single_day = if args.latest_only {
-        days.last().map(|d| (days.len(), d))
-    } else if let Some(single_day) = args.single_day {
+    let single_quiz = if args.latest_only {
+        quizzes.last().map(|d| (quizzes.len(), d))
+    } else if let Some(single_quiz) = args.single_quiz {
         Some((
-            single_day,
-            days.get(single_day - 1)
-                .ok_or_else(|| anyhow::anyhow!("invalid day: {}", single_day))?,
+            single_quiz,
+            quizzes
+                .get(single_quiz - 1)
+                .ok_or_else(|| anyhow::anyhow!("invalid quiz: {}", single_quiz))?,
         ))
     } else {
         None
     };
 
-    if let Some((day_nr, (day, input))) = single_day {
-        run_day(day_nr, day.as_ref(), input);
+    if let Some((quiz_nr, (quiz, input))) = single_quiz {
+        run_quiz(quiz_nr, quiz.as_ref(), input);
     } else {
-        for (index, (day, input)) in days.iter().enumerate() {
-            run_day(index + 1, day.as_ref(), input);
+        for (index, (quiz, input)) in quizzes.iter().enumerate() {
+            run_quiz(index + 1, quiz.as_ref(), input);
         }
     }
 

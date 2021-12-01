@@ -9,12 +9,12 @@
 ### Command line interface
 
 ```
-usage: aoc-2021 [-d DAY | --single-day DAY] [-l | --latest-only]
+usage: aoc-2021 [-h | --help] [-q QUIZ | --single-quiz QUIZ] [-l | --latest-only]
 
 Run advent of code 2021
 
 Options:
     -h, --help                  Print this help message
-    -d, --single-day    DAY     Only run the specified day
-    -l, --latest-only           Only run the latest day
+    -q, --single-quiz   DAY     Only run the specified quiz
+    -l, --latest-only           Only run the latest quiz
 ```

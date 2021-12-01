@@ -1,15 +1,15 @@
 use app::{app, help};
 
 mod app;
-mod day1;
+mod quiz01;
 
 /// The applications main entry point
 fn main() {
-    let days = all_the_days![
-        day1: "inputs/1",
+    let quizzes = all_the_quizzes![
+        quiz01: "inputs/1",
     ];
 
-    if let Err(e) = app(&days) {
+    if let Err(e) = app(&quizzes) {
         eprintln!("{}", e);
         help(std::io::stderr());
         std::process::exit(1);
