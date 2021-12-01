@@ -29,7 +29,7 @@ mod tests {
 
     #[test]
     fn part1_examples() {
-        assert_eq!(count_increases(EXAMPLE, 1), 7);
+        assert_eq!(count_increases(EXAMPLE, 2), 7);
     }
 
     #[test]
