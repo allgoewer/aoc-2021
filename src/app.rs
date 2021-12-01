@@ -1,3 +1,4 @@
+//! Application logic
 use aoc21::Day;
 use std::io::{stdout, Write};
 use std::process::exit;
@@ -52,7 +53,7 @@ where
     );
 }
 
-/// Print the help message
+/// Write the help message to the given [`Write`]r
 pub fn help<W: Write>(mut w: W) {
     write!(
         w,

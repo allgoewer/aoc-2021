@@ -3,6 +3,7 @@ use app::{app, help};
 mod app;
 mod day1;
 
+/// The applications main entry point
 fn main() {
     let days = all_the_days![
         day1: "inputs/1",
