@@ -24,18 +24,19 @@ fn count_sliding_increases(values: &[i32]) -> usize {
         .count()
 }
 
-#[test]
-fn part1_examples() {
-    assert_eq!(
-        count_increases(&[199, 200, 208, 210, 200, 207, 240, 269, 260, 263]),
-        7
-    );
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn part2_examples() {
-    assert_eq!(
-        count_sliding_increases(&[199, 200, 208, 210, 200, 207, 240, 269, 260, 263]),
-        5
-    );
+    const EXAMPLE: &[i32] = &[199, 200, 208, 210, 200, 207, 240, 269, 260, 263];
+
+    #[test]
+    fn part1_examples() {
+        assert_eq!(count_increases(EXAMPLE), 7);
+    }
+
+    #[test]
+    fn part2_examples() {
+        assert_eq!(count_sliding_increases(EXAMPLE), 5);
+    }
 }
