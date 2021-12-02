@@ -30,7 +30,7 @@ impl FromStr for Command {
             ("forward", x) => Ok(Self(x, 0)),
             ("down", y) => Ok(Self(0, y)),
             ("up", y) => Ok(Self(0, -y)),
-            _ => unreachable!(),
+            _ => Err(anyhow::anyhow!("unknown command")),
         }
     }
 }
