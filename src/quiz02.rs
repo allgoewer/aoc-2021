@@ -14,7 +14,7 @@ impl Quizzer for Quiz {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 struct Command(i64, i64);
 
 impl FromStr for Command {
@@ -23,14 +23,14 @@ impl FromStr for Command {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (cmd, delta) = s
             .split_once(' ')
-            .ok_or_else(|| anyhow::anyhow!("can't split once"))?;
+            .ok_or_else(|| anyhow::anyhow!("can't split once '{}'", s))?;
         let delta = delta.parse()?;
 
         match (cmd, delta) {
             ("forward", x) => Ok(Self(x, 0)),
             ("down", y) => Ok(Self(0, y)),
             ("up", y) => Ok(Self(0, -y)),
-            _ => Err(anyhow::anyhow!("unknown command")),
+            _ => Err(anyhow::anyhow!("unknown command '{}'", cmd)),
         }
     }
 }

@@ -25,11 +25,11 @@ pub mod util {
     pub fn parsed<T>(input: &str) -> impl Clone + Iterator<Item = T> + '_
     where
         T: FromStr,
-        <T as FromStr>::Err: Debug,
+        T::Err: Debug,
     {
         input
             .lines()
-            .map(|l| l.trim().parse::<T>().expect("Unable to parse AOC input"))
+            .map(|l| l.trim().parse::<T>().expect("unable to parse AOC input"))
     }
 
     /// Parses a newline separated input into a [`Vec<T>`]
@@ -39,7 +39,7 @@ pub mod util {
     pub fn collected<T>(input: &str) -> Vec<T>
     where
         T: FromStr,
-        <T as FromStr>::Err: std::fmt::Debug,
+        T::Err: Debug,
     {
         parsed(input).collect()
     }

@@ -3,7 +3,7 @@ use aoc21::Quizzer;
 use std::io::{stdout, Write};
 use std::time::Instant;
 
-/// Compose all [`aoc21::Quiz`]s and their respective inputs into a [`Vec`]
+/// Compose all [`aoc21::Quizzer`]s and their respective inputs into a [`Vec`]
 #[macro_export]
 macro_rules! all_the_quizzes {
     ($module:ident -> $input:expr) => {{
