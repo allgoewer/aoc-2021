@@ -36,15 +36,15 @@ impl FromStr for Command {
 }
 
 fn calc_depth_result(cmds: impl Iterator<Item = Command>) -> i64 {
-    let position = cmds.fold((0, 0), |(x, y), cmd| (x + cmd.0, y + cmd.1));
-    position.0 * position.1
+    let (x, y) = cmds.fold((0, 0), |(x, y), Command(dx, dy)| (x + dx, y + dy));
+    x * y
 }
 
 fn calc_complicated_depth_result(cmds: impl Iterator<Item = Command>) -> i64 {
-    let position = cmds.fold((0, 0, 0), |(aim, x, y), cmd| {
-        (aim + cmd.1, x + cmd.0, y + aim * cmd.0)
+    let (x, y, _) = cmds.fold((0, 0, 0), |(x, y, aim), Command(dx, daim)| {
+        (x + dx, y + aim * dx, aim + daim)
     });
-    position.1 * position.2
+    x * y
 }
 
 #[cfg(test)]
