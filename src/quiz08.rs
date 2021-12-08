@@ -53,7 +53,7 @@ fn match_pattern(
             if let Some(one) = decided.get(&1) {
                 if pat.is_superset(one) {
                     return Some((3, pat.clone()));
-                } else if let (Some(four), Some(one)) = (decided.get(&4), decided.get(&1)) {
+                } else if let Some(four) = decided.get(&4) {
                     let unique = four - one;
                     if pat.is_superset(&unique) {
                         return Some((5, pat.clone()));
