@@ -86,7 +86,6 @@ fn match_pattern(
 fn decode_patterns<'input>(patterns: impl Iterator<Item = &'input str>) -> Signals<'input> {
     let mut decided = HashMap::new();
     let mut undecided: Vec<_> = patterns.map(to_set).collect();
-    undecided.dedup();
 
     while !undecided.is_empty() {
         undecided.retain(|v| match v.len() {
