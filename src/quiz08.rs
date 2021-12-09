@@ -15,9 +15,13 @@ impl Quizzer for Quiz {
     }
 }
 
+/// Alias around iterators for each line of the input
 type Io<'input> = (SplitAsciiWhitespace<'input>, SplitAsciiWhitespace<'input>);
+
+/// Alias for a [`HashMap`] of input lines and their respective 7-segment value
 type Signals<'input> = HashMap<BTreeSet<u8>, u8>;
 
+/// Parse the puzzle input
 fn parse(line: &str) -> Io<'_> {
     let (patterns, outputs) = line.split_once('|').expect("parsing failed");
 
@@ -27,6 +31,7 @@ fn parse(line: &str) -> Io<'_> {
     )
 }
 
+/// Count the number of digits in the outputs which have a unique number of signal lines
 fn count_unique_digits<'input>(ios: impl Iterator<Item = Io<'input>>) -> usize {
     ios.map(|(_, o)| {
         o.filter(|digit| matches!(digit.len(), 2 | 3 | 4 | 7))
@@ -35,14 +40,19 @@ fn count_unique_digits<'input>(ios: impl Iterator<Item = Io<'input>>) -> usize {
     .sum()
 }
 
+/// Descramble signal lines, decode the outputs and calculate the sum
 fn sum_output_values<'input>(ios: impl Iterator<Item = Io<'input>>) -> usize {
     ios.map(|(p, o)| decode_output(o, decode_patterns(p))).sum()
 }
 
+/// Generates a [`BTreeSet`] from a &[`str`]
+///
+/// It is assumed that the input is ASCII.
 fn to_set(input: &str) -> BTreeSet<u8> {
     input.as_bytes().iter().copied().collect()
 }
 
+/// Tries to decode a scrambled input line pattern with the help of the already decoded signal lines
 fn match_pattern(
     pat: &BTreeSet<u8>,
     decided: &HashMap<u8, BTreeSet<u8>>,
@@ -83,6 +93,7 @@ fn match_pattern(
     None
 }
 
+/// Tries to decode all scrambled input signals
 fn decode_patterns<'input>(patterns: impl Iterator<Item = &'input str>) -> Signals<'input> {
     let mut decided = HashMap::new();
     let mut undecided: Vec<_> = patterns.map(to_set).collect();
@@ -110,6 +121,7 @@ fn decode_patterns<'input>(patterns: impl Iterator<Item = &'input str>) -> Signa
     decided.into_iter().map(|(k, v)| (v, k)).collect()
 }
 
+/// Decode the output signals with the decoded input signals
 fn decode_output<'input>(
     outputs: impl Iterator<Item = &'input str>,
     signals: Signals<'input>,
