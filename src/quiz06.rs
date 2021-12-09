@@ -1,4 +1,4 @@
-//! Day 1: Sonar Sweep
+//! Day 6: Lanternfish
 use aoc21::Quizzer;
 
 pub struct Quiz;
@@ -13,6 +13,7 @@ impl Quizzer for Quiz {
     }
 }
 
+/// Collect the quiz input
 fn collect(input: &str) -> Vec<u8> {
     input
         .split(',')
@@ -20,6 +21,7 @@ fn collect(input: &str) -> Vec<u8> {
         .collect()
 }
 
+/// Predict the number of fishes after n_days
 fn predict_fishies(fishies: &[u8], n_days: usize) -> usize {
     let mut days = [0usize; 9];
 
