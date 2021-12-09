@@ -45,7 +45,7 @@ where
     let elapsed = start.elapsed();
 
     println!(
-        "quiz{:0>2}-part{} {:>9} us {:>12}",
+        "quiz{:0>2}-part{} {:>9} us {:>16}",
         quiz,
         part,
         elapsed.as_micros(),
