@@ -4,6 +4,7 @@ mod app;
 mod quiz01;
 mod quiz02;
 mod quiz03;
+mod quiz06;
 mod quiz07;
 mod quiz08;
 mod quiz09;
@@ -14,6 +15,7 @@ fn main() {
         quiz01: "inputs/1",
         quiz02: "inputs/2",
         quiz03: "inputs/3",
+        quiz06: "inputs/6",
         quiz07: "inputs/7",
         quiz08: "inputs/8",
         quiz09: "inputs/9",
