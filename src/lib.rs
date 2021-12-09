@@ -15,11 +15,59 @@ pub trait Quizzer {
     }
 }
 
-/// A set of utility functions useful for handling Advent of Code quizzes
+/// A set of utility functions and types useful for handling Advent of Code quizzes
 pub mod util {
     use std::fmt::Debug;
-    use std::ops::{Index, IndexMut};
+    use std::ops::{Deref, DerefMut, Index, IndexMut};
     use std::str::FromStr;
+
+    mod private {
+        /// Used to seal the supers modules
+        pub trait Sealed {}
+    }
+
+    /// GridPos is used to index a grid and to find out whether a point lies on the grid
+    pub trait GridPos: private::Sealed {
+        /// The position the GridPos represents
+        fn pos<T>(&self, grid: &Grid<T>) -> (usize, usize);
+
+        /// Whether the position is on the grid or not
+        #[inline]
+        fn is_on_grid<T>(&self, grid: &Grid<T>) -> bool {
+            let (width, height) = grid.dim();
+            let (x, y) = self.pos(grid);
+
+            x < width && y < height
+        }
+    }
+
+    impl private::Sealed for (usize, usize) {}
+
+    impl GridPos for (usize, usize) {
+        #[inline]
+        fn pos<T>(&self, _grid: &Grid<T>) -> (usize, usize) {
+            (self.0, self.1)
+        }
+    }
+
+    /// A position on a [`Grid<T>`] which wraps around at the borders
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+    pub struct WrappingPos(pub usize, pub usize);
+
+    impl private::Sealed for WrappingPos {}
+
+    impl GridPos for WrappingPos {
+        #[inline]
+        fn pos<T>(&self, grid: &Grid<T>) -> (usize, usize) {
+            let (width, height) = grid.dim();
+            (self.0 % width, self.1 % height)
+        }
+
+        #[inline]
+        fn is_on_grid<T>(&self, _grid: &Grid<T>) -> bool {
+            true
+        }
+    }
 
     /// A two-dimensional grid of values
     #[derive(Clone, Debug, PartialEq, Eq, Hash)]
@@ -33,18 +81,6 @@ pub mod util {
     }
 
     impl<T> Grid<T> {
-        /// Get the number of values in the grid
-        pub fn len(&self) -> usize {
-            self.values.len()
-        }
-
-        /// Whether the grid contains no values
-        ///
-        /// Equivalent to `grid.len() == 0`
-        pub fn is_empty(&self) -> bool {
-            self.values.len() == 0
-        }
-
         /// The dimensions of the grid
         ///
         /// Returns (width, height) of the grid
@@ -53,13 +89,77 @@ pub mod util {
         }
 
         /// Whether a point lies within the grid
-        pub fn contains(&self, (x, y): (usize, usize)) -> bool {
-            x < self.width && y < self.height
+        pub fn contains<P: GridPos>(&self, pos: P) -> bool {
+            pos.is_on_grid(self)
+        }
+
+        /// An iterator over a grid row
+        pub fn row_iter(&self, row: usize) -> impl Iterator<Item = &T> {
+            self.values.iter().skip(row * self.width).take(self.width)
+        }
+
+        /// An iterator over a grid column
+        pub fn col_iter(&self, col: usize) -> impl Iterator<Item = &T> {
+            self.values.iter().skip(col).step_by(self.width)
+        }
+
+        /// A mutable iterator over a grid row
+        pub fn row_iter_mut(&mut self, row: usize) -> impl Iterator<Item = &mut T> {
+            self.values.iter_mut().skip(row).step_by(self.width)
+        }
+
+        /// A mutable iterator over a grid column
+        pub fn col_iter_mut(&mut self, col: usize) -> impl Iterator<Item = &mut T> {
+            self.values.iter_mut().skip(col).step_by(self.width)
         }
 
         /// An iterator over all positions of the grid
         pub fn index_iter(&self) -> impl Iterator<Item = (usize, usize)> + '_ {
             (0..self.height).flat_map(|y| (0..self.width).zip(std::iter::repeat(y)))
+        }
+    }
+
+    impl<T> AsMut<[T]> for Grid<T> {
+        #[inline]
+        fn as_mut(&mut self) -> &mut [T] {
+            &mut self.values
+        }
+    }
+
+    impl<T> AsRef<[T]> for Grid<T> {
+        #[inline]
+        fn as_ref(&self) -> &[T] {
+            &self.values
+        }
+    }
+
+    impl<T> AsMut<Grid<T>> for Grid<T> {
+        #[inline]
+        fn as_mut(&mut self) -> &mut Grid<T> {
+            self
+        }
+    }
+
+    impl<T> AsRef<Grid<T>> for Grid<T> {
+        #[inline]
+        fn as_ref(&self) -> &Grid<T> {
+            self
+        }
+    }
+
+    impl<T> Deref for Grid<T> {
+        type Target = [T];
+
+        #[inline]
+        fn deref(&self) -> &Self::Target {
+            &self.values
+        }
+    }
+
+    impl<T> DerefMut for Grid<T> {
+        #[inline]
+        fn deref_mut(&mut self) -> &mut Self::Target {
+            &mut self.values
         }
     }
 
@@ -85,15 +185,35 @@ pub mod util {
         }
     }
 
+    impl<T> Index<WrappingPos> for Grid<T> {
+        type Output = T;
+
+        #[inline]
+        fn index(&self, index: WrappingPos) -> &Self::Output {
+            let (x, y) = index.pos(self);
+            &self.values[x + y * self.width]
+        }
+    }
+
+    impl<T> IndexMut<WrappingPos> for Grid<T> {
+        #[inline]
+        fn index_mut(&mut self, index: WrappingPos) -> &mut Self::Output {
+            let (x, y) = index.pos(self);
+            &mut self.values[x + y * self.width]
+        }
+    }
+
     impl<T> Index<(usize, usize)> for Grid<T> {
         type Output = T;
 
+        #[inline]
         fn index(&self, (x, y): (usize, usize)) -> &Self::Output {
             &self.values[x + y * self.width]
         }
     }
 
     impl<T> IndexMut<(usize, usize)> for Grid<T> {
+        #[inline]
         fn index_mut(&mut self, (x, y): (usize, usize)) -> &mut Self::Output {
             &mut self.values[x + y * self.width]
         }
