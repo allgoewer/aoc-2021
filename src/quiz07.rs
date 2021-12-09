@@ -1,6 +1,7 @@
 //! Day 1: Sonar Sweep
 use aoc21::Quizzer;
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {

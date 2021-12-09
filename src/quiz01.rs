@@ -1,6 +1,7 @@
 //! Day 1: Sonar Sweep
 use aoc21::{util::*, Quizzer};
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {
@@ -13,6 +14,7 @@ impl Quizzer for Quiz {
     }
 }
 
+/// Count the number of increases in depth from one step to another
 fn count_increases(values: &[i32], len: usize) -> usize {
     // w[1] + .. + w[len - 2] cancels out on both sides of the equation
     values.windows(len).filter(|w| w.first() < w.last()).count()

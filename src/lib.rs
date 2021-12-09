@@ -1,3 +1,8 @@
+//! Utilities for Advent of Code
+
+#![deny(dead_code, unused_imports, unused_mut)]
+#![warn(missing_docs, clippy::missing_docs_in_private_items)]
+
 /// Trait to be implemented by all 25 quizzes of the Advent of Code
 ///
 /// Implementations of this trait should return the quizzes result (which is probably always numeric) as a String.
@@ -21,6 +26,7 @@ pub mod util {
     use std::ops::{Deref, DerefMut, Index, IndexMut};
     use std::str::FromStr;
 
+    #[allow(clippy::missing_docs_in_private_items)]
     mod private {
         /// Used to seal the supers modules
         pub trait Sealed {}

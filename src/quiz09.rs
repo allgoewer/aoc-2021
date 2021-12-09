@@ -2,6 +2,7 @@
 use aoc21::{util::*, Quizzer};
 use std::collections::HashSet;
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {

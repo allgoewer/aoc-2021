@@ -1,6 +1,7 @@
 //! Day 3: Binary Diagnostic
 use aoc21::{util::*, Quizzer};
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {
@@ -13,6 +14,7 @@ impl Quizzer for Quiz {
     }
 }
 
+/// Collect the input
 fn collect(input: &str) -> Vec<u16> {
     collected_with(input, |v| u16::from_str_radix(v, 2)).expect("radix parsing failed")
 }
@@ -34,6 +36,7 @@ fn count_ones<'a>(values: impl IntoIterator<Item = &'a u16>, counter: &mut [usiz
         .count()
 }
 
+/// Calculate the the submarines power consumption according to part 1
 fn part1(values: &[u16], bits: usize) -> usize {
     let mut one_counts = vec![0; bits];
     let n_entries = count_ones(values, &mut one_counts);
@@ -53,6 +56,7 @@ fn part1(values: &[u16], bits: usize) -> usize {
     gamma * epsilon
 }
 
+/// Calculate the submarines oxygen generator rating and co2 scrubber rating according to part 2
 fn part2(values: Vec<u16>, n_bits: usize) -> usize {
     let mut one_counts = vec![0; n_bits];
     let mut ogr_values = values.clone();

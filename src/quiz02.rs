@@ -2,6 +2,7 @@
 use aoc21::{util::*, Quizzer};
 use std::str::FromStr;
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {
@@ -14,6 +15,7 @@ impl Quizzer for Quiz {
     }
 }
 
+/// Submarine movement command
 #[derive(Debug)]
 struct Command(i64, i64);
 
@@ -35,11 +37,13 @@ impl FromStr for Command {
     }
 }
 
+/// Calculate the depth according to part 1
 fn calc_depth_result(cmds: impl Iterator<Item = Command>) -> i64 {
     let (x, y) = cmds.fold((0, 0), |(x, y), Command(dx, dy)| (x + dx, y + dy));
     x * y
 }
 
+/// Calculate the depth according to part 2
 fn calc_complicated_depth_result(cmds: impl Iterator<Item = Command>) -> i64 {
     let (x, y, _) = cmds.fold((0, 0, 0), |(x, y, aim), Command(dx, daim)| {
         (x + dx, y + aim * dx, aim + daim)

@@ -2,7 +2,7 @@
 use aoc21::{util::*, Quizzer};
 use std::{convert::Infallible, str::FromStr};
 
-#[allow(clippy::missing_docs_in_private_items)]
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {

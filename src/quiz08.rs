@@ -3,6 +3,7 @@ use aoc21::{util::*, Quizzer};
 use std::collections::{BTreeSet, HashMap};
 use std::str::SplitAsciiWhitespace;
 
+/// Todays quiz implementation
 pub struct Quiz;
 
 impl Quizzer for Quiz {
