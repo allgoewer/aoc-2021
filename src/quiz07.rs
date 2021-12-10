@@ -1,4 +1,4 @@
-//! Day 1: Sonar Sweep
+//! Day 7: The Treachery of Whales
 use aoc21::Quizzer;
 
 /// Todays quiz implementation
