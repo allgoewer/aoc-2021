@@ -63,11 +63,9 @@ fn flash(octopuses: &mut Octopuses) -> u64 {
             flashes += 1;
 
             for neigh in neighbours {
-                if !octopuses.contains(neigh) {
-                    continue;
+                if octopuses.contains(neigh) {
+                    octopuses[neigh].0 += 1;
                 }
-
-                octopuses[neigh].0 += 1;
             }
         }
     }
