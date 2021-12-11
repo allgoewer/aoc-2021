@@ -120,10 +120,6 @@ pub mod util {
         }
 
         /// An iterator over all positions of the grid
-        //pub fn index_iter(&self) -> impl Iterator<Item = (usize, usize)> + '_ {
-        //    (0..self.height).flat_map(|y| (0..self.width).zip(std::iter::repeat(y)))
-        //}
-
         pub fn index_iter(&self) -> GridIndexIter {
             GridIndexIter {
                 dim: self.dim(),
