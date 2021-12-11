@@ -1,6 +1,6 @@
 //! Advent of Code 2021
 
-#![deny(dead_code, unused_imports, unused_mut)]
+//#![deny(dead_code, unused_imports, unused_mut)]
 #![warn(missing_docs, clippy::missing_docs_in_private_items)]
 
 use app::{app, help};
@@ -15,6 +15,7 @@ mod quiz07;
 mod quiz08;
 mod quiz09;
 mod quiz10;
+mod quiz11;
 
 /// The applications main entry point
 fn main() {
@@ -28,6 +29,7 @@ fn main() {
         quiz08: "inputs/8",
         quiz09: "inputs/9",
         quiz10: "inputs/10",
+        quiz11: "inputs/11",
     ];
 
     if let Err(e) = app(&quizzes) {
