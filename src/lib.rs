@@ -120,8 +120,43 @@ pub mod util {
         }
 
         /// An iterator over all positions of the grid
-        pub fn index_iter(&self) -> impl Iterator<Item = (usize, usize)> + '_ {
-            (0..self.height).flat_map(|y| (0..self.width).zip(std::iter::repeat(y)))
+        //pub fn index_iter(&self) -> impl Iterator<Item = (usize, usize)> + '_ {
+        //    (0..self.height).flat_map(|y| (0..self.width).zip(std::iter::repeat(y)))
+        //}
+
+        pub fn index_iter(&self) -> GridIndexIter {
+            GridIndexIter {
+                dim: self.dim(),
+                current: (0, 0),
+            }
+        }
+    }
+
+    /// An iterator over the indices of a grid
+    pub struct GridIndexIter {
+        /// The dimensions (width, height) of the indexed grid
+        dim: (usize, usize),
+        /// The current iteration step
+        current: (usize, usize),
+    }
+
+    impl Iterator for GridIndexIter {
+        type Item = (usize, usize);
+
+        fn next(&mut self) -> Option<Self::Item> {
+            let next = self.current;
+
+            self.current.0 += 1;
+
+            if self.current.0 >= self.dim.0 {
+                self.current = (0, self.current.1 + 1);
+            }
+
+            if next.1 >= self.dim.1 {
+                None
+            } else {
+                Some(next)
+            }
         }
     }
 
@@ -274,5 +309,36 @@ pub mod util {
         F: Clone + Fn(&str) -> Result<T, E>,
     {
         parsed_with(input, f).collect()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn grid_index_iter() {
+        let grid: util::Grid<u8> = (vec![0; 16], 4).try_into().expect("can't construct grid");
+        assert_eq!(
+            grid.index_iter().collect::<Vec<_>>(),
+            [
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (3, 0),
+                (0, 1),
+                (1, 1),
+                (2, 1),
+                (3, 1),
+                (0, 2),
+                (1, 2),
+                (2, 2),
+                (3, 2),
+                (0, 3),
+                (1, 3),
+                (2, 3),
+                (3, 3)
+            ]
+        );
     }
 }
