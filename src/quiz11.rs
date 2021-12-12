@@ -75,7 +75,7 @@ fn flash(octopuses: &mut Octopuses) -> u64 {
 
 /// Reset all previously flashing octopuses to 0 energy
 fn reset(octopuses: &mut Octopuses) {
-    for (energy, flashed) in octopuses.iter_mut() {
+    for (energy, ref flashed) in octopuses.iter_mut() {
         if *flashed {
             *energy = 0;
         }
