@@ -16,6 +16,7 @@ mod quiz08;
 mod quiz09;
 mod quiz10;
 mod quiz11;
+mod quiz13;
 
 /// The applications main entry point
 fn main() {
@@ -30,6 +31,7 @@ fn main() {
         quiz09: "inputs/9",
         quiz10: "inputs/10",
         quiz11: "inputs/11",
+        quiz13: "inputs/13",
     ];
 
     if let Err(e) = app(&quizzes) {
