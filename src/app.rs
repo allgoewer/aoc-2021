@@ -1,7 +1,7 @@
 //! Application logic
 use aoc21::Quizzer;
 use std::io::{stdout, Write};
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
 /// Compose all [`aoc21::Quizzer`]s and their respective inputs into a [`Vec`]
 #[macro_export]
@@ -27,16 +27,17 @@ macro_rules! all_the_quizzes {
 /// Run the two parts of a quiz, printing their output and execution time
 ///
 /// Note that the printed execution time does *NOT* have benchmark-quality.
-fn run_quiz(index: usize, quiz: &dyn ::aoc21::Quizzer, input: &str) {
-    timed(index, 1, || quiz.part1(input));
-    timed(index, 2, || quiz.part2(input));
+fn run_quiz(index: usize, quiz: &dyn ::aoc21::Quizzer, input: &str) -> Duration {
+    let duration = timed(index, 1, || quiz.part1(input)) + timed(index, 2, || quiz.part2(input));
     println!();
+
+    duration
 }
 
 /// Execute a closure and print its output and execution time
 ///
 /// Note that the printed execution time does *NOT* have benchmark-quality
-fn timed<F>(quiz: usize, part: usize, func: F)
+fn timed<F>(quiz: usize, part: usize, func: F) -> Duration
 where
     F: Fn() -> String,
 {
@@ -51,6 +52,8 @@ where
         elapsed.as_micros(),
         result
     );
+
+    elapsed
 }
 
 /// Write the help message to the given [`Write`]r
@@ -117,13 +120,20 @@ pub fn app(quizzes: &[(Box<dyn Quizzer>, &str)]) -> Result<(), anyhow::Error> {
         None
     };
 
+    let mut total = Duration::default();
+
     if let Some((quiz_nr, (quiz, input))) = single_quiz {
-        run_quiz(quiz_nr, quiz.as_ref(), input);
+        total += run_quiz(quiz_nr, quiz.as_ref(), input);
     } else {
         for (index, (quiz, input)) in quizzes.iter().enumerate() {
-            run_quiz(index + 1, quiz.as_ref(), input);
+            total += run_quiz(index + 1, quiz.as_ref(), input);
         }
     }
+
+    println!(
+        "Total execution time: {:>7.2} ms",
+        total.as_secs_f64() * 1000.
+    );
 
     Ok(())
 }
