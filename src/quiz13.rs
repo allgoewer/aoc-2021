@@ -113,7 +113,7 @@ impl Paper {
 impl fmt::Display for Paper {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if let Some(&(width, height)) = self.0.iter().last() {
-            f.write_str("\n\t")?;
+            f.write_str("\n\n  ")?;
 
             for y in 0..=height {
                 for x in 0..=width {
@@ -124,7 +124,7 @@ impl fmt::Display for Paper {
                     }
                 }
 
-                f.write_str("\n\t")?;
+                f.write_str("\n  ")?;
             }
         }
 
@@ -172,12 +172,13 @@ mod tests {
         assert_eq!(
             paper.to_string(),
             "
-\t#####
-\t#   #
-\t#   #
-\t#   #
-\t#####
-\t"
+
+  #####
+  #   #
+  #   #
+  #   #
+  #####
+  "
         );
     }
 }
