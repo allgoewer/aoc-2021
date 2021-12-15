@@ -166,5 +166,18 @@ mod tests {
     }
 
     #[test]
-    fn part2_examples() {}
+    fn part2_examples() {
+        let (mut paper, folds) = parse(EXAMPLE);
+        paper.fold_and_count(&folds);
+        assert_eq!(
+            paper.to_string(),
+            "
+\t#####
+\t#   #
+\t#   #
+\t#   #
+\t#####
+\t"
+        );
+    }
 }
