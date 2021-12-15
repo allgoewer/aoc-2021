@@ -113,18 +113,18 @@ impl Paper {
 impl fmt::Display for Paper {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if let Some(&(width, height)) = self.0.iter().last() {
-            f.write_str("\n\n  ")?;
+            f.write_str("\n\t")?;
 
             for y in 0..=height {
                 for x in 0..=width {
                     if self.0.contains(&(x, y)) {
-                        f.write_str("\x1b[7m \x1b[0m")?;
+                        f.write_char('#')?;
                     } else {
                         f.write_char(' ')?;
                     }
                 }
 
-                f.write_str("\n  ")?;
+                f.write_str("\n\t")?;
             }
         }
 
