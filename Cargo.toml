@@ -1,17 +1,17 @@
 [package]
-name = "aoc-2021"
-version = "0.1.0"
 authors = ["Maik Allgöwer <maik@llgoewer.de>"]
 edition = "2021"
-
-[lib]
-path = "src/lib.rs"
-name = "aoc21"
-
+name = "aoc-2021"
+version = "0.1.0"
 [[bin]]
-path = "src/main.rs"
 name = "aoc21-cli"
+path = "src/main.rs"
 
 [dependencies]
-pico-args = "0.4.2"
 anyhow = "1.0.50"
+nom = "7.1.0"
+pico-args = "0.4.2"
+
+[lib]
+name = "aoc21"
+path = "src/lib.rs"
