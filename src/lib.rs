@@ -306,6 +306,33 @@ pub mod util {
     {
         parsed_with(input, f).collect()
     }
+
+    /// Parses a base16 string into a [`Vec<u8>`]
+    pub fn base16_decode(input: &str) -> anyhow::Result<Vec<u8>> {
+        /// Base 16 decoding map
+        const MAP: &[u8] = b"0123456789ABCDEF";
+
+        if input.len() % 2 != 0 {
+            return Err(anyhow::anyhow!("input length is not a multiple of 2"));
+        }
+
+        let mut data = Vec::with_capacity(input.len() / 2);
+
+        for chunk in input.as_bytes().chunks_exact(2) {
+            match (MAP.binary_search(&chunk[0]), MAP.binary_search(&chunk[1])) {
+                (Ok(pos0), Ok(pos1)) => data.push(((pos0 as u8) << 4) | pos1 as u8),
+                (_, _) => {
+                    return Err(anyhow::anyhow!(
+                        "{}{} is not valid base64",
+                        chunk[0],
+                        chunk[1]
+                    ));
+                }
+            }
+        }
+
+        Ok(data)
+    }
 }
 
 #[cfg(test)]
@@ -336,5 +363,27 @@ mod tests {
                 (3, 3)
             ]
         );
+    }
+
+    #[test]
+    fn base16_ok() {
+        assert_eq!(util::base16_decode("AB").unwrap(), &[0xABu8]);
+        assert_eq!(
+            util::base16_decode("CAFFEEBABE").unwrap(),
+            &[0xCA, 0xFF, 0xEE, 0xBA, 0xBE]
+        );
+        assert_eq!(
+            util::base16_decode("00112233445566778899AABBCCDDEEFF").unwrap(),
+            &[
+                0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD,
+                0xEE, 0xFF
+            ]
+        );
+    }
+
+    #[test]
+    fn base16_err() {
+        assert!(matches!(util::base16_decode("000"), Err(_)));
+        assert!(matches!(util::base16_decode("GG"), Err(_)));
     }
 }
